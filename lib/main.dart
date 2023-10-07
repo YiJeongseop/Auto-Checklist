@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:auto_checklist/android_screen.dart';
-import 'package:auto_checklist/windows_screen.dart';
+import 'package:auto_checklist/screens/android_screen.dart';
+import 'package:auto_checklist/screens/windows_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,9 +19,9 @@ Future<void> main() async {
       await windowManager.setTitle("Auto Checklist");
       await windowManager.setAsFrameless();
       await windowManager.setPosition(Offset(primaryDisplay.size.width - 350, 50.0));
-      await windowManager.setSize(const Size(300, 300));
+      await windowManager.setSize(const Size(320, 320));
       await windowManager.setMaximumSize(const Size(600, 600));
-      await windowManager.setMinimumSize(const Size(200, 200));
+      await windowManager.setMinimumSize(const Size(320, 320));
       await windowManager.show();
     });
   }
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Auto Checklist',
       debugShowCheckedModeBanner: false,
-      home: (Platform.isAndroid) ? const AndroidScreen() : const WindowsScreen(),
+      home: (Platform.isAndroid) ? const AndroidScreen() : WindowsScreen(),
     );
   }
 }
