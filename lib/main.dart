@@ -2,12 +2,16 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:screen_retriever/screen_retriever.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:auto_checklist/screens/android_screen.dart';
 import 'package:auto_checklist/screens/windows_screen.dart';
 
+late SharedPreferences prefs;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  prefs = await SharedPreferences.getInstance();
 
   if (Platform.isWindows){
     Display primaryDisplay = await screenRetriever.getPrimaryDisplay();
@@ -26,18 +30,18 @@ Future<void> main() async {
     });
   }
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Auto Checklist',
       debugShowCheckedModeBanner: false,
-      home: (Platform.isAndroid) ? const AndroidScreen() : WindowsScreen(),
+      home: (Platform.isAndroid) ? const AndroidScreen() : const WindowsScreen(),
     );
   }
 }

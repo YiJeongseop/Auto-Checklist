@@ -1,11 +1,17 @@
 import 'dart:io';
-import 'package:auto_checklist/controllers/task_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:auto_checklist/controllers/task_controller.dart';
 
-class WindowsScreen extends StatelessWidget {
-  WindowsScreen({Key? key}) : super(key: key);
+class WindowsScreen extends StatefulWidget {
+  const WindowsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<WindowsScreen> createState() => _WindowsScreenState();
+}
+
+class _WindowsScreenState extends State<WindowsScreen> {
   final TaskController taskController = Get.put(TaskController());
 
   @override
@@ -31,7 +37,7 @@ class WindowsScreen extends StatelessWidget {
               child: IconButton(
                 padding: const EdgeInsets.only(top: 2),
                 onPressed: () {
-                  taskController.addTask(Task(seconds: 0, timeList: []));
+                  taskController.addTask('abc', false);
                 },
                 splashRadius: 15,
                 icon: const Icon(Icons.add),
@@ -60,26 +66,18 @@ class WindowsScreen extends StatelessWidget {
                         ? TextFormField(
                             decoration: const InputDecoration(
                               isDense: true,
-                              contentPadding:
-                                  EdgeInsets.only(bottom: 7, top: 7),
+                              contentPadding: EdgeInsets.only(bottom: 7, top: 7),
                             ),
                             maxLines: null,
-                            initialValue:
-                                (taskController.tasks[index].content ==
-                                        'Add Content')
-                                    ? ''
-                                    : taskController.tasks[index].content,
+                            initialValue: taskController.tasks[index],
                             onChanged: (value) {
                               taskController.editingContent.value = value;
                             },
                           )
                         : Text(
-                            taskController.tasks[index].content,
+                            taskController.tasks[index],
                             style: TextStyle(
-                                color: (taskController.tasks[index].content ==
-                                        'Add Content')
-                                    ? Colors.black38
-                                    : Colors.black,
+                                color: Colors.black,
                                 decoration: taskController.isCompleted[index]
                                     ? TextDecoration.lineThrough
                                     : TextDecoration.none),
@@ -89,6 +87,7 @@ class WindowsScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 2),
                             onPressed: () {
                               taskController.beNotCompleted(index);
+                              taskController.saveData(isTasks: 0);
                             },
                             splashRadius: 15,
                             icon: const Icon(
@@ -100,6 +99,7 @@ class WindowsScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 2),
                             onPressed: () {
                               taskController.beCompleted(index);
+                              taskController.saveData(isTasks: 0);
                             },
                             splashRadius: 15,
                             icon: const Icon(
@@ -116,7 +116,7 @@ class WindowsScreen extends StatelessWidget {
                             onPressed: () {
                               taskController.editingIndex.value = index;
                               taskController.editingContent.value =
-                                  taskController.tasks[index].content;
+                                  taskController.tasks[index];
                             },
                             splashRadius: 15,
                             icon: const Icon(
@@ -128,9 +128,9 @@ class WindowsScreen extends StatelessWidget {
                           IconButton(
                             padding: const EdgeInsets.only(top: 2),
                             onPressed: () {
-                              taskController.tasks[index].content =
+                              taskController.tasks[index] =
                                   taskController.editingContent.value;
-                              taskController.editingContent.value = '';
+                              taskController.saveData(isTasks: 1);
                               taskController.editingIndex.value = -1;
                             },
                             splashRadius: 15,
@@ -143,6 +143,7 @@ class WindowsScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 2),
                           onPressed: () {
                             taskController.removeTask(index);
+                            taskController.saveData(isTasks: -1);
                             taskController.editingIndex.value = -1;
                           },
                           splashRadius: 15,

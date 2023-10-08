@@ -33,6 +33,7 @@ dependencies:
   get: ^4.6.5
   window_manager: ^0.3.6
   screen_retriever: ^0.1.9
+  shared_preferences: ^2.2.1
 
 dev_dependencies:
   flutter_test:

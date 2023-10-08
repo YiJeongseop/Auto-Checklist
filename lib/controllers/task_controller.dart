@@ -1,14 +1,47 @@
 import 'package:get/get.dart';
 
+import '../main.dart';
+
 class TaskController extends GetxController {
-  List<Task> tasks = <Task>[].obs;
-  List<bool> isCompleted = <bool>[].obs;
+  RxList<String> tasks = <String>[].obs;
+  RxList<bool> isCompleted = <bool>[].obs;
   RxInt editingIndex = (-1).obs;
   RxString editingContent = ''.obs;
 
-  void addTask(Task task) {
+  _fetchData() async {
+    final tasks = prefs.getStringList('tasks') ?? [];
+    this.tasks.value = tasks;
+    final isCompleted = prefs.getStringList('isCompleted') ?? [];
+    this.isCompleted.value = isCompleted.map((value){
+      return (value == 'true') ? true : false;
+    }).toList();
+  }
+
+  saveData({required int isTasks}) {
+    List<String> temp = isCompleted.toList().map((value){
+      return (value == true) ? "true" : "false";
+    }).toList();
+
+    if(isTasks == 1){
+      prefs.setStringList('tasks', tasks);
+    }else if(isTasks == 0){
+      prefs.setStringList('isCompleted', temp);
+    } else{
+      prefs.setStringList('tasks', tasks);
+      prefs.setStringList('isCompleted', temp);
+    }
+  }
+
+  @override
+  void onInit() {
+    _fetchData();
+    print("onInit!");
+    super.onInit();
+  }
+
+  void addTask(String task, bool completed) {
     tasks.add(task);
-    isCompleted.add(task.completed);
+    isCompleted.add(completed);
   }
 
   void removeTask(int index) {
@@ -17,28 +50,11 @@ class TaskController extends GetxController {
   }
 
   void beCompleted(int index) {
-    tasks[index].completed = true;
     isCompleted[index] = true;
   }
 
   void beNotCompleted(int index) {
-    tasks[index].completed = false;
     isCompleted[index] = false;
   }
 }
 
-class Task {
-  Task({
-    this.content = 'Add Content',
-    this.completed = false,
-    this.isTimeCheck = false,
-    this.seconds = 600,
-    required this.timeList,
-  });
-
-  String content;
-  bool completed;
-  final bool isTimeCheck;
-  final int seconds;
-  final List<String> timeList;
-}
