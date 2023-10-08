@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:auto_checklist/screens/android_screen.dart';
-import 'package:auto_checklist/screens/windows_screen.dart';
+import 'screens/android_screen.dart';
+import 'screens/windows_screen.dart';
 
 late SharedPreferences prefs;
 
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Auto Checklist',
       debugShowCheckedModeBanner: false,
-      home: (Platform.isAndroid) ? const AndroidScreen() : const WindowsScreen(),
+      home: (Platform.isAndroid) ? const AndroidScreen() : WindowsScreen(),
     );
   }
 }
