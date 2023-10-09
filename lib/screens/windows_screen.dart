@@ -10,18 +10,15 @@ class WindowsScreen extends StatelessWidget {
 
   final TaskController taskController = Get.put(TaskController());
   final PagesController pagesController = Get.put(PagesController());
-  List<String> hourList = ['--'];
-  List<String> minuteList = ['--'];
+  List<String> hourList = ['--', '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
+  '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+  List<String> minuteList = ['--', '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
+    '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26',
+  '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42',
+  '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59'];
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i <= 59; i++) {
-      String formattedNumber = i.toString().padLeft(2, '0');
-      if (i < 24) {
-        hourList.add(formattedNumber);
-      }
-      minuteList.add(formattedNumber);
-    }
     return DragToResizeArea(
       child: GestureDetector(
         // Prevent the screen from being full when double-clicked.

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
 import '../main.dart';
 
 String _tasksStorage = 'tasks4';
@@ -78,12 +79,74 @@ class TaskController extends GetxController {
   @override
   void onInit() {
     _fetchData();
-    // print(tasks);
-    // print(isCompleted);
-    // print(useTime);
-    // print(times);
-    // print(checkedDateTime);
+    _firstCheck();
+    _setupTimer();
     super.onInit();
+  }
+
+  void _firstCheck() {
+    final currentTime = DateTime.now();
+    for(int i = 0; i < tasks.length; i++){
+      if(useTime[i] == true || isCompleted[i] == true){
+        for(int j = 0; j <= 8; j+=4){
+          try{
+            int hour = int.parse(times[i].substring(j, j+2));
+            int minute = int.parse(times[i].substring(j+2, j+4));
+            Duration difference = currentTime.difference(checkedDateTime[i]);
+            int daysDifference = difference.inDays;
+            if(daysDifference > 1){
+              isCompleted[i] = false;
+              break;
+            } else if(daysDifference == 1){
+              if(hour < checkedDateTime[i].hour || (hour == checkedDateTime[i].hour && minute <= checkedDateTime[i].minute)){
+                if(hour > currentTime.hour || (hour == currentTime.hour && minute > currentTime.minute)){
+                  continue;
+                } else{
+                  isCompleted[i] = false;
+                  break;
+                }
+              } else {
+                isCompleted[i] = false;
+                break;
+              }
+            } else {
+              if(hour < currentTime.hour || (hour == currentTime.hour && minute <= currentTime.minute)){
+                if(hour < checkedDateTime[i].hour || (hour == checkedDateTime[i].hour && minute <= checkedDateTime[i].minute)){
+                  continue;
+                } else {
+                  isCompleted[i] = false;
+                  break;
+                }
+              }
+            }
+          } catch(e){
+            continue;
+          }
+        }
+      }
+    }
+  }
+
+  void _setupTimer() {
+    Timer.periodic(const Duration(minutes: 1), (timer) {
+      final currentTime = DateTime.now();
+      for(int i = 0; i < tasks.length; i++){
+        if(useTime[i] == true || isCompleted[i] == true){
+          for(int j = 0; j <= 8; j+=4){
+            try{
+              int hour = int.parse(times[i].substring(j, j+2));
+              int minute = int.parse(times[i].substring(j+2, j+4));
+              if(currentTime.hour == hour && currentTime.minute == minute){
+                isCompleted[i] = false;
+                break;
+              }
+            } catch(e){
+              continue;
+            }
+          }
+        }
+      }
+    });
   }
 
   void firstAddTask() {
