@@ -14,6 +14,8 @@ class TaskController extends GetxController {
   RxList<bool> isCompleted = <bool>[].obs;
   RxList<bool> useTime = <bool>[].obs;
   RxList<String> times = <String>[].obs;
+
+  // This variable stores the time the user recently checked.
   RxList<DateTime> checkedDateTime = <DateTime>[].obs;
 
   RxInt editingIndex = (-1).obs;
@@ -84,6 +86,8 @@ class TaskController extends GetxController {
     super.onInit();
   }
 
+  // This function runs only the first time the app is turned on.
+  // Compare the time they recently checked with the time they want the check turned off.
   void _firstCheck() {
     final currentTime = DateTime.now();
     for(int i = 0; i < tasks.length; i++){
@@ -94,10 +98,18 @@ class TaskController extends GetxController {
             int minute = int.parse(times[i].substring(j+2, j+4));
             Duration difference = currentTime.difference(checkedDateTime[i]);
             int daysDifference = difference.inDays;
+
+            // There are three things to consider.
+            // 1. Checked at least 2 days ago.
             if(daysDifference > 1){
               isCompleted[i] = false;
               break;
-            } else if(daysDifference == 1){
+            }
+
+            // 2. Checked 1 day ago.
+            // Do not turn off the check only when the time they checked is later than the time they want the check turned off
+            // and the current time is earlier than the time they want the check turned off.
+            else if(daysDifference == 1){
               if(hour < checkedDateTime[i].hour || (hour == checkedDateTime[i].hour && minute <= checkedDateTime[i].minute)){
                 if(hour > currentTime.hour || (hour == currentTime.hour && minute > currentTime.minute)){
                   continue;
@@ -109,7 +121,10 @@ class TaskController extends GetxController {
                 isCompleted[i] = false;
                 break;
               }
-            } else {
+            }
+
+            // 3. Checked today.
+            else {
               if(hour < currentTime.hour || (hour == currentTime.hour && minute <= currentTime.minute)){
                 if(hour < checkedDateTime[i].hour || (hour == checkedDateTime[i].hour && minute <= checkedDateTime[i].minute)){
                   continue;
@@ -153,7 +168,11 @@ class TaskController extends GetxController {
     tasks.add('');
     isCompleted.add(false);
     useTime.add(false);
+
+    // Users can save three times when they want the check turned off.
+    // Example) 080012001800
     times.add('------------');
+
     checkedDateTime.add(DateTime.utc(1969, 7, 20, 20, 18));
   }
 
