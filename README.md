@@ -3,7 +3,7 @@ This app automatically turn off the check when the time is set.
 
 I made this app because I thought it would be nice to have a memo app that automatically disappears the cancellation line.
 
-## Desktop App
+## Windows App
 ![Desktop Screenshot](https://github.com/YiJeongseop/Auto-Checklist/assets/112690335/20cba8a3-f6b0-4b81-98a8-c254da227081)
 
 ## Android App
