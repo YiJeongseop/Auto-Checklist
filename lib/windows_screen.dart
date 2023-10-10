@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:window_manager/window_manager.dart';
-import '../controllers/task_controller.dart';
-import '../controllers/pages_controller.dart';
-import '../widgets/windows_widgets.dart';
+import 'controllers/task_controller.dart';
+import 'controllers/pages_controller.dart';
+import 'windows_widgets.dart';
 
 class WindowsScreen extends StatelessWidget {
   WindowsScreen({Key? key}) : super(key: key);
